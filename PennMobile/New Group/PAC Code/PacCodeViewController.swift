@@ -8,30 +8,10 @@
 
 import Foundation
 
-class PacCodeViewController : UIViewController, ShowsAlert, IndicatorEnabled {
+class PacCodeViewController : UIViewController, ShowsAlertForError, IndicatorEnabled {
     
     var pacCode : String?
         
-    lazy var quadDigitLabel = [digitLabel, digitLabel, digitLabel, digitLabel]
-    
-    let pacCodeHStack = UIStackView()
-    let pacCodeSecurityInfoLabel = UILabel()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .white
-        
-        self.title = "PAC Code"
-        
-        self.navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
-        
-        setupPacCodeHStack()
-        setupPacCodeSecurityInfoLabel()
-        setupPacCodeTitleLabel()
-        setupPlaceHolderIcon()
-    }
-    
     var digitLabel : UILabel {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -42,23 +22,55 @@ class PacCodeViewController : UIViewController, ShowsAlert, IndicatorEnabled {
         label.font = UIFont.boldSystemFont(ofSize: 30)
         
         label.backgroundColor = .grey6
+        label.layer.cornerRadius = 10
+        label.clipsToBounds = true
         
         return label
     }
-
-    func setupPacCodeHStack() {
-        pacCodeHStack.axis = .horizontal
-        pacCodeHStack.distribution = .equalCentering
-        pacCodeHStack.spacing = 10.0
+    
+    lazy var quadDigitLabel = [digitLabel, digitLabel, digitLabel, digitLabel]
+    
+    var pacCodeIcon: UIImageView!
+    let pacCodeTitleLabel = UILabel()
+    let pacCodeSecurityInfoLabel = UILabel()
+    let pacCodeHStack = UIStackView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        for digitLabel in quadDigitLabel {
-            pacCodeHStack.addArrangedSubview(digitLabel)
-        }
+        view.backgroundColor = .uiBackground
         
-        view.addSubview(pacCodeHStack)
-        pacCodeHStack.translatesAutoresizingMaskIntoConstraints = false
-        pacCodeHStack.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        pacCodeHStack.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        self.title = "PAC Code"
+        
+        self.navigationItem.rightBarButtonItem = .init(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
+        
+        setupPacCodeIcon()
+        setupPacCodeTitleLabel()
+        setupPacCodeSecurityInfoLabel()
+        setupPacCodeHStack()
+    }
+    
+    func setupPacCodeIcon() {
+        pacCodeIcon = UIImageView(image: UIImage(named: "PAC_Code")!)
+        pacCodeIcon.contentMode = .scaleAspectFill
+        pacCodeIcon.tintColor = .labelPrimary
+        
+        view.addSubview(pacCodeIcon)
+        pacCodeIcon.translatesAutoresizingMaskIntoConstraints = false
+        pacCodeIcon.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        pacCodeIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 52).isActive = true
+        pacCodeIcon.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+    }
+    
+    func setupPacCodeTitleLabel() {
+        pacCodeTitleLabel.textColor = .labelPrimary
+        pacCodeTitleLabel.font = UIFont.systemFont(ofSize: 35)
+        pacCodeTitleLabel.text = "PAC Code"
+        
+        view.addSubview(pacCodeTitleLabel)
+        pacCodeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        pacCodeTitleLabel.topAnchor.constraint(equalTo: pacCodeIcon.bottomAnchor, constant: 10).isActive = true
+        pacCodeTitleLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
     }
     
     func setupPacCodeSecurityInfoLabel() {
@@ -72,36 +84,24 @@ class PacCodeViewController : UIViewController, ShowsAlert, IndicatorEnabled {
         
         view.addSubview(pacCodeSecurityInfoLabel)
         pacCodeSecurityInfoLabel.translatesAutoresizingMaskIntoConstraints = false
-        pacCodeSecurityInfoLabel.bottomAnchor.constraint(equalTo: pacCodeHStack.topAnchor, constant: -25).isActive = true
+        pacCodeSecurityInfoLabel.topAnchor.constraint(equalTo: pacCodeTitleLabel.bottomAnchor, constant: 20).isActive = true
         pacCodeSecurityInfoLabel.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 0.80).isActive = true
         pacCodeSecurityInfoLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
     }
     
-    func setupPacCodeTitleLabel() {
-        let pacCodeTitleLabel = UILabel()
-        pacCodeTitleLabel.textColor = .labelPrimary
-        pacCodeTitleLabel.font = UIFont.systemFont(ofSize: 35)
-        pacCodeTitleLabel.text = "PAC Code"
+    func setupPacCodeHStack() {
+        pacCodeHStack.axis = .horizontal
+        pacCodeHStack.distribution = .equalCentering
+        pacCodeHStack.spacing = 10.0
         
-        view.addSubview(pacCodeTitleLabel)
-        pacCodeTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        pacCodeTitleLabel.bottomAnchor.constraint(equalTo: pacCodeSecurityInfoLabel.topAnchor, constant: -20).isActive = true
-        pacCodeTitleLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-    }
-    
-//    This is only in place as a placeholder for an icon if deemed necessary
-    func setupPlaceHolderIcon() {
-        if #available(iOS 13.0, *) {
-            let placeHolderIcon = UIImageView(image: UIImage(systemName: "circle.grid.3x3.fill"))
-            view.addSubview(placeHolderIcon)
-            
-            placeHolderIcon.translatesAutoresizingMaskIntoConstraints = false
-            placeHolderIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
-            placeHolderIcon.tintColor = .grey1
-            placeHolderIcon.widthAnchor.constraint(equalToConstant: 100).isActive = true
-            placeHolderIcon.heightAnchor.constraint(equalToConstant: 100).isActive = true
-            placeHolderIcon.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        for digitLabel in quadDigitLabel {
+            pacCodeHStack.addArrangedSubview(digitLabel)
         }
+        
+        view.addSubview(pacCodeHStack)
+        pacCodeHStack.translatesAutoresizingMaskIntoConstraints = false
+        pacCodeHStack.topAnchor.constraint(equalTo: pacCodeSecurityInfoLabel.bottomAnchor, constant: 25).isActive = true
+        pacCodeHStack.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
     }
     
     func updatePACCode() {
@@ -188,24 +188,15 @@ extension PacCodeViewController {
     }
     
     fileprivate func handleNetworkPacCodeResult(_ result: Result<String, NetworkingError>) {
-        switch result {
-        case .success(let pacCode):
-            self.savePacCode(pacCode)
-            self.pacCode = pacCode
-            self.showAlert(withMsg: "Your PAC Code has been refreshed.", title: "Refresh Complete!", completion: self.updatePACCode)
-            
-        case .failure(.noInternet):
-            self.showAlert(withMsg: "You appear to be offline.\nPlease try again later.", title: "Network Error", completion: { self.navigationController?.popViewController(animated: true) })
-            
-        case .failure(.parsingError):
-            self.showAlert(withMsg: "Penn's PAC Code servers are currently not updating. We hope this will be fixed shortly", title: "Uh oh!", completion: { self.navigationController?.popViewController(animated: true) })
-            
-        case .failure(.authenticationError):
-            self.showAlert(withMsg: "Unable to access your PAC Code.\nPlease login again.", title: "Login Error", completion: { self.handleAuthenticationError() })
-            
-        default:
-            self.showAlert(withMsg: "Something went wrong.\nPlease try again later.", title: "Uh oh!", completion: { self.navigationController?.popViewController(animated: true) } )
-        }
+        
+        let popVC : () -> Void = { self.navigationController?.popViewController(animated: true) }
+        
+        showRefreshAlertForError(result: result, title: "PAC Code", success: self.handleNetworkPacCodeRefreshCompletion(_:), noInternet: popVC, parsingError: popVC, authenticationError: self.handleAuthenticationError)
+    }
+    
+    fileprivate func handleNetworkPacCodeRefreshCompletion(_ pacCode: String) {
+        self.savePacCode(pacCode)
+        self.pacCode = pacCode
     }
     
     fileprivate func handleAuthenticationError() {
