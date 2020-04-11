@@ -11,7 +11,6 @@ import Foundation
 protocol GSRManageGroupViewModelDelegate {
     func beginBooking()
     func inviteToGroup()
-//    func kickFromGroup(member: GSRGroupMember)
     func handleSelectMember(member: GSRGroupMember)
     func fetchGroup()
 }
@@ -31,10 +30,10 @@ class GSRManageGroupViewModel: NSObject {
     fileprivate var group: GSRGroup!
     fileprivate var currentUser: GSRGroupMember!
 
-    // MARK: Delegate
+    // MARK: - Delegate
     var delegate: GSRManageGroupViewModelDelegate!
 
-    // MARK: init
+    // MARK: - init
     init(group: GSRGroup) {
         self.group = group
     }
@@ -47,7 +46,7 @@ class GSRManageGroupViewModel: NSObject {
     }
 }
 
-//MARK: UITableViewDataSource
+// MARK: - UITableViewDataSource
 extension GSRManageGroupViewModel: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
@@ -102,6 +101,7 @@ extension GSRManageGroupViewModel: UITableViewDataSource {
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: GroupSettingsCell.identifier, for: indexPath) as! GroupSettingsCell
+                cell.selectionStyle = UITableViewCell.SelectionStyle.none
                 if let userSettings = group.userSettings {
                     let userSetting = indexPath.row == 1 ? userSettings.pennKeyActive : userSettings.notificationsOn
                     cell.setupCell(with: userSetting)

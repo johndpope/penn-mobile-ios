@@ -144,6 +144,7 @@ struct GSRGroupMember: Codable {
     let pennKeyActive: Bool
     let notificationsOn: Bool
     let isAdmin: Bool
+    let id: Int
     
     enum CodingKeys: String, CodingKey {
         case pennKey = "user"
@@ -151,6 +152,7 @@ struct GSRGroupMember: Codable {
         case pennKeyActive = "pennkey_allow"
         case notificationsOn = "notifications"
         case isAdmin = "type"
+        case id = "id"
     }
     
     public init(from decoder: Decoder) throws {
@@ -158,10 +160,12 @@ struct GSRGroupMember: Codable {
         let memberType = try keyedContainer.decode(String.self, forKey: .isAdmin)
         let pennKeyActive = try keyedContainer.decode(Bool.self, forKey: .pennKeyActive)
         let notificationsOn = try keyedContainer.decode(Bool.self, forKey: .notificationsOn)
+        let id = try keyedContainer.decode(Int.self, forKey: .id)
         
         self.isAdmin = (memberType == "A")
         self.pennKeyActive = pennKeyActive
         self.notificationsOn = notificationsOn
+        self.id = id
         
         let user = try keyedContainer.decode(GSRGroupMemberUser.self, forKey: .pennKey)
         self.pennKey = user.pennKey
