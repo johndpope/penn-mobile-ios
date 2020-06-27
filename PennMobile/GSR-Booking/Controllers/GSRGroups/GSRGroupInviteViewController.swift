@@ -88,9 +88,18 @@ class GSRGroupInviteViewController: UIViewController {
     func prepareSearchBar() {
         searchBar = UISearchBar()
         searchBar.delegate = self
-        searchBar.searchTextField.placeholder = "Search by Name or PennKey"
-        searchBar.searchTextField.textColor = .labelPrimary
-        searchBar.searchTextField.autocapitalizationType = .none
+        if #available(iOS 13.0, *) {
+            searchBar.searchTextField.placeholder = "Search by Name or PennKey"
+            searchBar.searchTextField.textColor = .labelPrimary
+            searchBar.searchTextField.autocapitalizationType = .none
+        } else {
+            searchBar.placeholder = "Search by Name or PennKey"
+            if let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField {
+                textFieldInsideSearchBar.textColor = .labelPrimary
+            }
+            searchBar.autocapitalizationType = .none
+        }
+        
         view.addSubview(searchBar)
         searchBar.topAnchor.constraint(equalTo: inviteUsersLabel.bottomAnchor, constant: 20).isActive = true
         searchBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
