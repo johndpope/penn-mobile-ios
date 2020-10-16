@@ -38,7 +38,6 @@ class HomeCellHeader: UIView {
     private func prepareTitleLabels() {
         secondaryTitleLabel = getSecondaryLabel()
         primaryTitleLabel = getPrimaryLabel()
-
         addSubview(secondaryTitleLabel)
         addSubview(primaryTitleLabel)
         

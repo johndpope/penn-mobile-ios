@@ -107,7 +107,7 @@ extension HomeNewsCell {
         tapGestureRecognizer.numberOfTapsRequired = 1
         return tapGestureRecognizer
     }
-    
+
     @objc fileprivate func handleTapped(_ sender: Any) {
         guard let delegate = delegate as? URLSelectable else { return }
         delegate.handleUrlPressed(urlStr: article.articleUrl, title: article.source, item: self.item, shouldLog: true)

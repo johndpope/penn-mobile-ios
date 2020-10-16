@@ -37,6 +37,8 @@ class HomeViewController: GenericViewController {
 
         registerForNotifications()
 
+
+
         self.navigationItem.leftBarButtonItem = nil
         self.navigationItem.rightBarButtonItem = nil
     }
@@ -122,7 +124,6 @@ extension HomeViewController {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.isHidden = true // Initially while loading
-
         view.addSubview(tableView)
 
         tableView.anchorToTop(nil, left: view.leftAnchor, bottom: nil, right: view.rightAnchor)

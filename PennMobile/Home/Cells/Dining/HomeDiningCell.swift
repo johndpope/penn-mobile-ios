@@ -43,8 +43,17 @@ final class HomeDiningCell: UITableViewCell, HomeCellConformable {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         prepareHomeCell()
         prepareUI()
+        backgroundColor = .orange
+        let btn = UIButton()
+        btn.backgroundColor = UIColor.red
+        btn.addTarget(self, action: #selector(test), for: UIControl.Event.touchUpInside)
+        self.addSubview(btn)
+        _ = btn.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 5, leftConstant: 5, bottomConstant: 5, rightConstant: 5, widthConstant: 0, heightConstant: 0)
     }
 
+    @objc func test() {
+        print("BTN")
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
