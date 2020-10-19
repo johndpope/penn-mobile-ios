@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftSoup
 
 final class HomeNewsCell: UITableViewCell, HomeCellConformable {    
     static var identifier: String = "homeNewsCell"
@@ -77,6 +78,7 @@ final class HomeNewsCell: UITableViewCell, HomeCellConformable {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         prepareHomeCell()
         prepareUI()
+        fetchData()
         
         let tapGestureRecognizer = getTapGestureRecognizer()
         cardView.addGestureRecognizer(tapGestureRecognizer)
@@ -85,6 +87,33 @@ final class HomeNewsCell: UITableViewCell, HomeCellConformable {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - DATA Fectching NOTE TO Dan 6
+extension HomeNewsCell {
+    func fetchData() {
+        print("Getting data")
+        
+        let myURL = URL(string: "https://www.thedp.com/article/2020/10/penn-park-farm-food-wellness-collaborative")!
+        let html = try! String(contentsOf: myURL, encoding: .utf8)
+        
+        do {
+            let doc = try SwiftSoup.parseBodyFragment(html)
+            
+            let headerTitle = try doc.title()
+            print("Header title: \(headerTitle)")
+            let something = try doc.select("article").select("p, figure")
+            
+            for e in something {
+                print(e)
+            }
+        } catch Exception.Error(let type, let message) {
+          print("Message: \(message)")
+        } catch {
+          print("error")
+        }
+        
     }
 }
 
